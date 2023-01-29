@@ -230,5 +230,6 @@ const removeTagList = (list: TagList) => {
 
 .aside {
   background-color: rgb(250, 250, 255);
+  padding: 5px;
 }
 </style>
