@@ -12,6 +12,7 @@ import {
   ElCol,
   ElInput,
   ElCard,
+  ElDivider,
 } from 'element-plus';
 import { computed, ref, watch } from 'vue';
 import type { TagDataCost } from './EditDistance';
@@ -67,7 +68,7 @@ watch(input, () => {
     }
   }, 300);
 });
-const negtive =
+const negtiveTags =
   'lowres, bad anatomy, bad hands, text, error, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality, normal quality, jpeg artifacts, signature, watermark, username, blurry, bad feet';
 const equalInstance = (instance: Instance, other: Instance) => {
   return instance.english === other.english;
@@ -123,80 +124,87 @@ const removeTagList = (list: TagList) => {
         </ElAside>
         <ElMain>
           <ElContainer class="full-height">
-            <ElHeader height="auto">
-              <ElDescriptions :border="true">
-                <ElDescriptionsItem :span="3" label="结果">
-                  {{ computedTags }}
-                </ElDescriptionsItem>
-                <ElDescriptionsItem :span="3" label="负面">
-                  {{ negtive }}
-                </ElDescriptionsItem>
-                <ElDescriptionsItem :span="3" label="已知用法">
-                  <div
+            <ElHeader height="auto" style="max-height: 50%; overflow: auto">
+              <ElCard style="margin: 5px">
+                <div>
+                  <span style="user-select: none; color: green"> + </span>
+                  <span>{{ computedTags }}</span>
+                </div>
+              </ElCard>
+              <ElCard style="margin: 5px">
+                <div>
+                  <span style="user-select: none; color: green">
+                    已知用法
+                  </span>
+                  <ElButton
                     v-for="tagList of usedLists"
-                    style="padding: 5px; display: inline-block"
+                    :plain="true"
+                    @click="removeTagList(tagList)"
+                    style="margin: 5px"
                   >
-                    <ElButton :plain="true" @click="removeTagList(tagList)">
-                      <div>{{ tagList.chinese }}</div>
-                      <div style="color: gray">
-                        {{ tagList.tags.join(', ') }}
-                      </div>
-                    </ElButton>
-                  </div>
-                </ElDescriptionsItem>
-                <ElDescriptionsItem :span="3" label="机器翻译">
-                  <div
+                    <div>{{ tagList.chinese }}</div>
+                    <div style="color: gray">
+                      {{ tagList.tags.join(', ') }}
+                    </div>
+                  </ElButton>
+                </div>
+                <ElDivider></ElDivider>
+                <div>
+                  <span style="user-select: none; color: red"> 机器翻译 </span>
+                  <ElButton
                     v-for="instance of usedTags"
-                    style="padding: 5px; display: inline-block"
+                    :plain="true"
+                    @click="removeInstance(instance)"
+                    style="margin: 5px"
                   >
-                    <ElButton :plain="true" @click="removeInstance(instance)">
-                      <div>{{ instance.chinese }}</div>
-                      <div style="color: gray">{{ instance.english }}</div>
-                    </ElButton>
-                  </div>
-                </ElDescriptionsItem>
-              </ElDescriptions>
+                    <div>{{ instance.chinese }}</div>
+                    <div style="color: gray">{{ instance.english }}</div>
+                  </ElButton>
+                </div>
+              </ElCard>
+              <ElCard style="margin: 5px">
+                <div>
+                  <span style="user-select: none; color: red"> - </span>
+                  <span>{{ negtiveTags }}</span>
+                </div>
+              </ElCard>
+            </ElHeader>
+            <ElMain
+              style="
+                border-style: solid;
+                border-width: 3px;
+                border-color: rgb(160, 235, 230);
+              "
+            >
               <ElInput v-model="input" placeholder="试试“高质量”?">
                 <template #prepend> 双语输入 </template>
               </ElInput>
-            </ElHeader>
-            <ElMain>
               <ElRow :gutter="20">
                 <ElCol :span="12">
                   <h2>已知用法</h2>
-                  <div
+                  <ElCard
                     v-for="tagList of similars.tagLists"
-                    style="padding: 5px"
+                    @click="addTagList(tagList)"
+                    :shadow="'hover'"
+                    style="cursor: pointer; margin: 5px"
                   >
-                    <ElCard
-                      @click="addTagList(tagList)"
-                      :shadow="'hover'"
-                      style="cursor: pointer"
-                    >
-                      <div class="break-word">
-                        <div>{{ tagList.chinese }}</div>
-                        <div style="color: gray">
-                          {{ tagList.tags.join(', ') }}
-                        </div>
-                      </div>
-                    </ElCard>
-                  </div>
+                    <div>{{ tagList.chinese }}</div>
+                    <div style="color: gray">
+                      {{ tagList.tags.join(', ') }}
+                    </div>
+                  </ElCard>
                 </ElCol>
                 <ElCol :span="12">
                   <h2>机器翻译</h2>
-                  <div
+                  <ElCard
                     v-for="instance of similars.instances"
-                    style="padding: 5px"
+                    @click="addInstance(instance)"
+                    :shadow="'hover'"
+                    style="cursor: pointer; margin: 5px"
                   >
-                    <ElCard
-                      @click="addInstance(instance)"
-                      :shadow="'hover'"
-                      style="cursor: pointer"
-                    >
-                      <div>{{ instance.chinese }}</div>
-                      <div style="color: gray">{{ instance.english }}</div>
-                    </ElCard>
-                  </div>
+                    <div>{{ instance.chinese }}</div>
+                    <div style="color: gray">{{ instance.english }}</div>
+                  </ElCard>
                 </ElCol>
               </ElRow>
             </ElMain>
@@ -218,10 +226,6 @@ const removeTagList = (list: TagList) => {
   align-items: center;
   background-color: rgb(68, 132, 229);
   color: white;
-}
-.break-word {
-  overflow-wrap: break-word;
-  word-break: break-all;
 }
 
 .aside {
