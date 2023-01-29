@@ -1,7 +1,7 @@
 {
-  "name": "electron-builder-pnpm-template",
+  "name": "novel-ai-tag-searcher",
   "version": "1.0.0",
-  "description": "Electron Builder Pnpm Template",
+  "description": "Novel AI Tag Searcher",
   "main": "dist/main.js",
   "scripts": {
     "fn:vue-dev": "vite --port 3000",
@@ -18,7 +18,7 @@
     "app-build": "run-s fn:vite-build fn:electron-build"
   },
   "build": {
-    "productName": "Electron Builder Pnpm Template",
+    "productName": "Novel AI Tag Searcher",
     "files": [
       "dist",
       "resources"

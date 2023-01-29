@@ -1,9 +1,5 @@
 import type { WholeHandler } from '../bridge';
 import { app, dialog as electronDialog } from 'electron';
-const templateName: WholeHandler['templateName'] = {
-    templateName: async () =>
-        'Electron Builder Pnpm Template - ' + JSON.stringify(__dirname),
-};
 const dialog: WholeHandler['dialog'] = {
     getPath: (_event, name) => {
         return app.getPath(name);
@@ -14,6 +10,5 @@ const dialog: WholeHandler['dialog'] = {
     },
 };
 export const wholeHandler: WholeHandler = {
-    templateName,
     dialog,
 };
