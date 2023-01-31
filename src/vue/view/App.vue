@@ -5,8 +5,7 @@ import {
   ElHeader,
   ElMain,
   ElAside,
-  ElDescriptions,
-  ElDescriptionsItem,
+  ElScrollbar,
   ElButton,
   ElRow,
   ElCol,
@@ -122,91 +121,113 @@ const removeTagList = (list: TagList) => {
             </ElButton>
           </div>
         </ElAside>
-        <ElMain>
+        <ElMain class="no-padding">
           <ElContainer class="full-height">
-            <ElHeader height="auto" style="max-height: 50%; overflow: auto">
-              <ElCard style="margin: 5px">
-                <div>
-                  <span style="user-select: none; color: green"> + </span>
-                  <span>{{ computedTags }}</span>
-                </div>
-              </ElCard>
-              <ElCard style="margin: 5px">
-                <div>
-                  <span style="user-select: none; color: green">
-                    已知用法
-                  </span>
-                  <ElButton
-                    v-for="tagList of usedLists"
-                    :plain="true"
-                    @click="removeTagList(tagList)"
-                    style="margin: 5px"
-                  >
-                    <div>{{ tagList.chinese }}</div>
-                    <div style="color: gray">
-                      {{ tagList.tags.join(', ') }}
-                    </div>
-                  </ElButton>
-                </div>
-                <ElDivider></ElDivider>
-                <div>
-                  <span style="user-select: none; color: red"> 机器翻译 </span>
-                  <ElButton
-                    v-for="instance of usedTags"
-                    :plain="true"
-                    @click="removeInstance(instance)"
-                    style="margin: 5px"
-                  >
-                    <div>{{ instance.chinese }}</div>
-                    <div style="color: gray">{{ instance.english }}</div>
-                  </ElButton>
-                </div>
-              </ElCard>
-              <ElCard style="margin: 5px">
-                <div>
-                  <span style="user-select: none; color: red"> - </span>
-                  <span>{{ negtiveTags }}</span>
-                </div>
-              </ElCard>
-            </ElHeader>
-            <ElMain
-              style="
-                border-style: solid;
-                border-width: 3px;
-                border-color: rgb(160, 235, 230);
-              "
+            <ElHeader
+              height="50%"
+              class="no-padding"
+              style="background-color: cornsilk"
             >
-              <ElInput v-model="input" placeholder="试试“高质量”?">
-                <template #prepend> 双语输入 </template>
-              </ElInput>
-              <ElRow :gutter="20">
-                <ElCol :span="12">
-                  <h2>已知用法</h2>
-                  <ElCard
-                    v-for="tagList of similars.tagLists"
-                    @click="addTagList(tagList)"
-                    :shadow="'hover'"
-                    style="cursor: pointer; margin: 5px"
-                  >
-                    <div>{{ tagList.chinese }}</div>
-                    <div style="color: gray">
-                      {{ tagList.tags.join(', ') }}
+              <ElScrollbar>
+                <div style="padding: 15px">
+                  <ElCard class="card-margin">
+                    <div>
+                      <span style="user-select: none; color: green"> + </span>
+                      <span>{{ computedTags }}</span>
                     </div>
                   </ElCard>
-                </ElCol>
-                <ElCol :span="12">
-                  <h2>机器翻译</h2>
-                  <ElCard
-                    v-for="instance of similars.instances"
-                    @click="addInstance(instance)"
-                    :shadow="'hover'"
-                    style="cursor: pointer; margin: 5px"
-                  >
-                    <div>{{ instance.chinese }}</div>
-                    <div style="color: gray">{{ instance.english }}</div>
+                  <ElCard class="card-margin">
+                    <div>
+                      <span style="user-select: none; color: green">
+                        已知用法
+                      </span>
+                      <ElButton
+                        v-for="tagList of usedLists"
+                        :plain="true"
+                        @click="removeTagList(tagList)"
+                        style="margin: 5px"
+                      >
+                        <div>{{ tagList.chinese }}</div>
+                        <div style="color: gray">
+                          {{ tagList.tags.join(', ') }}
+                        </div>
+                      </ElButton>
+                    </div>
+                    <ElDivider></ElDivider>
+                    <div>
+                      <span style="user-select: none; color: red">
+                        机器翻译
+                      </span>
+                      <ElButton
+                        v-for="instance of usedTags"
+                        :plain="true"
+                        @click="removeInstance(instance)"
+                        style="margin: 5px"
+                      >
+                        <div>{{ instance.chinese }}</div>
+                        <div style="color: gray">{{ instance.english }}</div>
+                      </ElButton>
+                    </div>
                   </ElCard>
-                </ElCol>
-              </ElRow>
+                  <ElCard class="card-margin">
+                    <div>
+                      <span style="user-select: none; color: red"> - </span>
+                      <span>{{ negtiveTags }}</span>
+                    </div>
+                  </ElCard>
+                </div>
+              </ElScrollbar>
+            </ElHeader>
+            <ElMain class="no-padding">
+              <ElScrollbar>
+                <div style="padding: 15px">
+                  <ElInput
+                    v-model="input"
+                    placeholder="试试“高质量”?"
+                    class="card-margin"
+                  >
+                    <template #prepend> 双语输入 </template>
+                  </ElInput>
+                  <ElRow :gutter="20" class="card-margin">
+                    <ElCol :span="12">
+                      <h2>已知用法</h2>
+                      <ElCard
+                        v-for="tagList of similars.tagLists"
+                        @click="addTagList(tagList)"
+                        :shadow="'hover'"
+                        class="card-margin"
+                        style="cursor: pointer"
+                        :body-style="{
+                          paddingTop: '5px',
+                          paddingBottom: '5px',
+                        }"
+                      >
+                        <div>{{ tagList.chinese }}</div>
+                        <div style="color: gray">
+                          {{ tagList.tags.join(', ') }}
+                        </div>
+                      </ElCard>
+                    </ElCol>
+                    <ElCol :span="12">
+                      <h2>机器翻译</h2>
+                      <ElCard
+                        v-for="instance of similars.instances"
+                        @click="addInstance(instance)"
+                        :shadow="'hover'"
+                        class="card-margin"
+                        style="cursor: pointer"
+                        :body-style="{
+                          paddingTop: '5px',
+                          paddingBottom: '5px',
+                        }"
+                      >
+                        <div>{{ instance.chinese }}</div>
+                        <div style="color: gray">{{ instance.english }}</div>
+                      </ElCard>
+                    </ElCol>
+                  </ElRow>
+                </div>
+              </ElScrollbar>
             </ElMain>
           </ElContainer>
         </ElMain>
@@ -231,5 +252,12 @@ const removeTagList = (list: TagList) => {
 .aside {
   background-color: rgb(250, 250, 255);
   padding: 5px;
+}
+.no-padding {
+  padding: 0px;
+  margin: 0px;
+}
+.card-margin {
+  margin: 5px;
 }
 </style>
