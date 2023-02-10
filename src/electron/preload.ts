@@ -15,14 +15,15 @@ const invokerOf = <T extends keyof WholeRemote>(
     }
     return result as WholeRemote[T];
 };
-const templateName = invokerOf('templateName', {
-    templateName: 0,
+const content = invokerOf('content', {
+    title: 0,
 });
-const dialog = invokerOf('dialog', {
+const fs = invokerOf('fs', {
     openFile: 0,
     getPath: 0,
+    readFile: 0,
+    readDir: 0,
+    getFileSize: 0,
 });
-const remote: WholeRemote = { templateName, dialog };
-for (const [key, value] of Object.entries(remote)) {
-    contextBridge.exposeInMainWorld(key, value);
-}
+const remote: WholeRemote = { content, fs };
+contextBridge.exposeInMainWorld('remote', remote);

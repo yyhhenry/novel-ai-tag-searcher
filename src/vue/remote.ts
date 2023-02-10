@@ -1,5 +1,2 @@
 import type { WholeRemote } from '../electron/bridge';
-const windowWithBridge = window as unknown as WholeRemote;
-export const remote: WholeRemote = {
-    dialog: windowWithBridge.dialog,
-};
+export const remote = (window as unknown as { remote: WholeRemote }).remote;
