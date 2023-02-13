@@ -2,10 +2,10 @@ import { app, BrowserWindow, Menu } from 'electron';
 import path from 'path';
 import { handleWholeModule } from './handler/handleWholeModule';
 import { wholeHandler } from './handler/handler';
+import { isDevelopmentMode } from './isDevelopmentMode';
 // 禁用硬件加速的确会导致性能的大幅下降
 // app.disableHardwareAcceleration();
-const isDevelopmentMode = process.env.MODE === 'development';
-const mainFolder = __dirname;
+const mainFolder = path.dirname(__dirname);
 const resourcesFolder = path.join(mainFolder, '../resources');
 if (!isDevelopmentMode) {
     Menu.setApplicationMenu(null);
@@ -14,11 +14,19 @@ const createWindow = () => {
     const mainWindow = new BrowserWindow({
         width: 800,
         height: 600,
-        useContentSize: true,
-        webPreferences: {
-            preload: path.join(mainFolder, 'preload.js'),
+        minWidth: 800,
+        minHeight: 600,
+        titleBarStyle: 'hidden',
+        titleBarOverlay: {
+            color: 'rgb(68, 132, 229)',
+            symbolColor: 'white',
         },
+        webPreferences: {
+            preload: path.join(mainFolder, 'electron/preload.js'),
+        },
+        show: false,
     });
+    mainWindow.on('ready-to-show', () => mainWindow.show());
     if (isDevelopmentMode) {
         mainWindow.loadURL('http://localhost:3000');
     } else {

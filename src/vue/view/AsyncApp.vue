@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import {
-  ElMessageBox,
   ElContainer,
   ElHeader,
   ElMain,
@@ -13,36 +12,18 @@ import {
   ElCard,
   ElDivider,
 } from 'element-plus';
+import HistoryList from './HistoryList.vue';
 import { computed, ref, watch } from 'vue';
 import type { TagDataCost } from '@/util/EditDistance';
 import { getSimilars } from '@/util/EditDistance';
 import type { Instance, TagList } from '@/util/TagDataDeclaration';
 import TitleView from './TitleView.vue';
-import { tagHistoryList } from '@/util/Database';
+import { addHistory } from '@/util/tagHistoryList';
 import { remote } from '@/remote';
 const title = await remote.content.title();
 const input = ref('');
 const usedTags = ref<Instance[]>([]);
 const usedLists = ref<TagList[]>([]);
-const maxHistory = 25;
-const addHistory = async (value: string) => {
-  tagHistoryList.value = [
-    value,
-    ...tagHistoryList.value.filter(str => str != value),
-  ].slice(0, maxHistory);
-};
-const removeHistory = async (value: string) => {
-  tagHistoryList.value = [
-    ...tagHistoryList.value.filter(str => str != value),
-  ].slice(0, maxHistory);
-};
-const beforeRemoveHistory = (value: string) => {
-  ElMessageBox.confirm(`确定删除${value}吗`)
-    .then(() => {
-      removeHistory(value);
-    })
-    .catch(() => {});
-};
 const computedTags = computed(() => {
   return [
     ...usedLists.value.flatMap(list => list.tags),
@@ -91,26 +72,17 @@ const removeTagList = (list: TagList) => {
 <template>
   <TitleView :title="title" />
   <ElContainer class="full-height root">
-    <ElHeader class="header">
-      <h1>{{ title }}</h1>
+    <ElHeader class="header draggable-of-frame">
+      <ElRow>
+        <ElCol>
+          <h1>{{ title }}</h1>
+        </ElCol>
+      </ElRow>
     </ElHeader>
     <ElMain style="padding: 0px">
       <ElContainer class="full-height">
         <ElAside class="aside">
-          <h2>历史记录</h2>
-          <p style="color: gray">(右键删除)</p>
-          <div
-            v-for="tag of tagHistoryList"
-            style="padding: 5px; display: inline-block"
-          >
-            <ElButton
-              :plain="true"
-              @click="() => (input = tag)"
-              @contextmenu="() => beforeRemoveHistory(tag)"
-            >
-              {{ tag }}
-            </ElButton>
-          </div>
+          <HistoryList v-model:input="input" />
         </ElAside>
         <ElMain class="no-padding">
           <ElContainer class="full-height">
@@ -233,6 +205,14 @@ const removeTagList = (list: TagList) => {
 .full-height.root {
   height: 100vh;
 }
+.draggable-of-frame {
+  user-select: none;
+  -webkit-app-region: drag;
+}
+.draggable-of-frame button {
+  -webkit-app-region: no-drag;
+}
+
 .header {
   display: flex;
   align-items: center;

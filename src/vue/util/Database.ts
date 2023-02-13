@@ -17,7 +17,3 @@ export const db = await openDB<{
         db.createObjectStore('history');
     },
 });
-export const tagHistoryList = ref<string[]>((await db.get('history', 'list')) ?? []);
-watch(tagHistoryList, async () => {
-    await db.put('history', [...tagHistoryList.value], 'list');
-});

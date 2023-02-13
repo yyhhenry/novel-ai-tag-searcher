@@ -1,12 +1,21 @@
 import type { WholeHandler } from '../bridge';
 import { app, dialog } from 'electron';
 import nodeFS from 'fs/promises';
+import path from 'path';
+import { isDevelopmentMode } from '../isDevelopmentMode';
 const content: WholeHandler['content'] = {
-    title: async () =>
-        `Novel AI Tag Searcher - ${process.platform}`,
+    title: async () => `Novel AI Tag Searcher - ${process.platform}`,
 };
 const fs: WholeHandler['fs'] = {
     getPath: (_event, name) => {
+        if (name === 'extra') {
+            return path.join(
+                isDevelopmentMode
+                    ? process.cwd()
+                    : path.dirname(app.getPath('exe')),
+                'extraFiles'
+            );
+        }
         return app.getPath(name);
     },
     openFile: async (_event, option) => {
