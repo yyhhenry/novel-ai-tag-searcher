@@ -73,11 +73,7 @@ const removeTagList = (list: TagList) => {
   <TitleView :title="title" />
   <ElContainer class="full-height root">
     <ElHeader class="header draggable-of-frame">
-      <ElRow>
-        <ElCol>
-          <h1>{{ title }}</h1>
-        </ElCol>
-      </ElRow>
+      <h1>{{ title }}</h1>
     </ElHeader>
     <ElMain style="padding: 0px">
       <ElContainer class="full-height">
