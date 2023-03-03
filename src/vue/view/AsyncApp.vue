@@ -20,6 +20,11 @@ import type { Instance, TagList } from '@/util/TagDataDeclaration';
 import TitleView from './TitleView.vue';
 import { addHistory } from '@/util/tagHistoryList';
 import { remote } from '@/remote';
+import { useDark, useToggle } from '@vueuse/core';
+const isSystemDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+const isDark = useDark();
+const toggleDark = useToggle(isDark);
+isDark.value = isSystemDarkMode;
 const title = await remote.content.title();
 const input = ref('');
 const usedTags = ref<Instance[]>([]);
@@ -84,8 +89,7 @@ const removeTagList = (list: TagList) => {
           <ElContainer class="full-height">
             <ElHeader
               height="50%"
-              class="no-padding"
-              style="background-color: cornsilk"
+              class="no-padding inner-header"
             >
               <ElScrollbar>
                 <div style="padding: 15px">
@@ -217,8 +221,11 @@ const removeTagList = (list: TagList) => {
 }
 
 .aside {
-  background-color: rgb(250, 250, 255);
+  background-color: var(--color-background-mute);
   padding: 5px;
+}
+.inner-header {
+  background-color: var(--color-background-soft);
 }
 .no-padding {
   padding: 0px;
