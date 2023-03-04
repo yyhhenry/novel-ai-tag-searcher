@@ -3,7 +3,6 @@ import {
   ElContainer,
   ElHeader,
   ElMain,
-  ElAside,
   ElScrollbar,
   ElButton,
   ElRow,
@@ -72,33 +71,23 @@ const removeTagList = (list: TagList) => {
 <template>
   <TitleView :title="title" />
   <ElContainer class="full-height root">
-    <ElHeader class="header draggable-of-frame">
-      <h1>{{ title }}</h1>
-    </ElHeader>
     <ElMain style="padding: 0px">
       <ElContainer class="full-height">
-        <ElAside class="aside">
-          <HistoryList v-model:input="input" />
-        </ElAside>
+        <HistoryList v-model:input="input" />
         <ElMain class="no-padding">
           <ElContainer class="full-height">
-            <ElHeader
-              height="50%"
-              class="no-padding inner-header"
-            >
+            <ElHeader height="50%" class="no-padding inner-header">
               <ElScrollbar>
                 <div style="padding: 15px">
                   <ElCard class="card-margin">
                     <div>
-                      <span style="user-select: none; color: green"> + </span>
+                      <span class="user-select-none"> + </span>
                       <span>{{ computedTags }}</span>
                     </div>
                   </ElCard>
                   <ElCard class="card-margin">
                     <div>
-                      <span style="user-select: none; color: green">
-                        已知用法
-                      </span>
+                      <span class="user-select-none"> 已知用法 </span>
                       <ElButton
                         v-for="tagList of usedLists"
                         :plain="true"
@@ -113,9 +102,7 @@ const removeTagList = (list: TagList) => {
                     </div>
                     <ElDivider></ElDivider>
                     <div>
-                      <span style="user-select: none; color: red">
-                        机器翻译
-                      </span>
+                      <span class="user-select-none"> 机器翻译 </span>
                       <ElButton
                         v-for="instance of usedTags"
                         :plain="true"
@@ -129,7 +116,7 @@ const removeTagList = (list: TagList) => {
                   </ElCard>
                   <ElCard class="card-margin">
                     <div>
-                      <span style="user-select: none; color: red"> - </span>
+                      <span class="user-select-none"> - </span>
                       <span>{{ negtiveTags }}</span>
                     </div>
                   </ElCard>
@@ -200,25 +187,6 @@ const removeTagList = (list: TagList) => {
 .full-height.root {
   height: 100vh;
 }
-.draggable-of-frame {
-  user-select: none;
-  -webkit-app-region: drag;
-}
-.draggable-of-frame button {
-  -webkit-app-region: no-drag;
-}
-
-.header {
-  display: flex;
-  align-items: center;
-  background-color: rgb(68, 132, 229);
-  color: white;
-}
-
-.aside {
-  background-color: var(--color-background-mute);
-  padding: 5px;
-}
 .inner-header {
   background-color: var(--color-background-soft);
 }
@@ -228,5 +196,8 @@ const removeTagList = (list: TagList) => {
 }
 .card-margin {
   margin: 5px;
+}
+.user-select-none {
+  user-select: none;
 }
 </style>
