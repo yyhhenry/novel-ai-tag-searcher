@@ -1,6 +1,6 @@
 {
   "name": "novel-ai-tag-searcher",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Novel AI Tag Searcher",
   "main": "dist/electron/main.js",
   "scripts": {
